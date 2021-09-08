@@ -1,12 +1,11 @@
-
-const { Data_Customer,Customer } = require("./Customer");
-const { Data_Room,Room } = require("./Room");
-const { Data_Booking,Booking } = require("./Booking");
-
+const { Data_Customer, Customer } = require("./Customer");
+const { Data_Room, Room } = require("./Room");
+const { Data_Booking, Booking } = require("./Booking");
 
 const reg_text = /^[a-zA-Z]{1,99}$/;
 const reg_tel = /^[0][689]\d{8}$/;
-const reg_number = /^[0-9]{1,4}$/;
+const reg_number = /^\d[0-9]{1,4}$/;
+const reg_price = /^\d{1,5}$/;
 const reg_room = /^[0-9][0-9][0-9]$/;
 const reg_day = /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/;
 
@@ -43,16 +42,12 @@ AddCustomer = (first_name, last_name, phone) => {
 };
 
 AddRoom = (R_number, type, Price) => {
-  if (
-    reg_text.test(type) &&
-    reg_room.test(R_number) &&
-    reg_number.test(Price)
-  ) {
+  if (reg_text.test(type) && reg_room.test(R_number) && reg_price.test(Price)) {
     const { length } = Data_Room;
     const idcurrent = length + 1;
     const found = Data_Room.some(
       (el) =>
-        el.Room_number === R_number && el.Type === type && el.price === Price
+        el.Room_number === R_number 
     );
 
     if (found) {
@@ -77,13 +72,13 @@ AddRoom = (R_number, type, Price) => {
 };
 
 GetCustomer = (name) => {
-    Search = Data_Customer.filter((p) => p.FirstName.includes(name));
-    return Search;
+  Search = Data_Customer.filter((p) => p.FirstName.includes(name));
+  return Search;
 };
 
 GetRoom = (name) => {
-    Search = Data_Room.filter((p) => p.Room_number.includes(name));
-    return Search;
+  Search = Data_Room.filter((p) => p.Room_number.includes(name));
+  return Search;
 };
 
 AddBooking = (name, number_room, start_date, end_date) => {
@@ -92,17 +87,18 @@ AddBooking = (name, number_room, start_date, end_date) => {
     reg_room.test(number_room) &&
     reg_day.test(start_date) &&
     reg_day.test(end_date)
-  ) { // validation ข้อมูลที่รับมา
+  ) {
+    // validation ข้อมูลที่รับมา
     const { length } = Data_Booking;
     const idcurrent = length + 1;
     const NameForAdd = Data_Customer.filter((p) => p.FirstName === name);
     const RoomForAdd = Data_Room.filter((p) => p.Room_number === number_room);
     if (NameForAdd.length !== 0 && RoomForAdd.length !== 0) { // เช็ค ว่า ข้อมูลที่ รับมา ว่า มีใน data ของเราหรือเปล่า
-      var NewBooking = new Booking(name, number_room, start_date, end_date); //เอาข้อมูลที่ได้ มาสร้าง object
-      const found = Data_Booking.some(
-        (el) => el.Name === NewBooking.Name || el.Room === NewBooking.Room 
-      );
-      if (found) { // เช็ค ข้อมูลที่เราจะเอาลง data ว่าใน data มีข้อมูลนี้หรือยัง
+      var NewBooking = new Booking(name, number_room, start_date, end_date);
+      const found = Data_Booking.some((el) => el.Room === NewBooking.Room && el.Start_Date === NewBooking.Start_date && el.End_Date === NewBooking.End_date);
+   
+      if (found) {
+        // เช็ค ข้อมูลที่เราจะเอาลง data ว่าใน data มีข้อมูลนี้หรือยัง
         throw "this room has already booking"; // ถ้ามีเเล้ว จะ throw error
       } else {
         Data_Booking.push({
@@ -113,7 +109,7 @@ AddBooking = (name, number_room, start_date, end_date) => {
           End_Date: NewBooking.End_date,
         });
         console.table(Data_Booking);
-        console.log(RoomForAdd[0].status = 'Occupied');
+        console.log((RoomForAdd[0].status = "Occupied"));
         return NewBooking;
       }
     } else {
@@ -128,6 +124,7 @@ GetBooking = () => {
   console.log(Data_Booking);
   return Data_Booking;
 };
+
 module.exports = {
   AddCustomer: AddCustomer,
   GetCustomer: GetCustomer,
