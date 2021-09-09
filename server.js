@@ -1,7 +1,7 @@
 var http = require('http');
 var url = require('url');
 
-const {AddCustomer,GetCustomer,AddRoom,GetRoom,AddBooking,GetBooking }= require('./hotel');
+const {AddCustomer,GetCustomer,AddRoom,GetRoom,AddBooking,GetBooking,DeleteBooking }= require('./hotel');
 
 http.createServer(function (req, res) {
 
@@ -74,7 +74,18 @@ http.createServer(function (req, res) {
                 status = 400;
                 console.log(err);
             }
+            break; 
+        case '/DeleteBooking': 
+            try {
+                data = DeleteBooking(request_path.query.id);
+                message = 'success';
+            } catch(err) {
+                message += err;
+                status = 400;
+                console.log(err);
+            }
             break;       
+              
         
     
 
@@ -97,5 +108,5 @@ http.createServer(function (req, res) {
 	res.end(JSON.stringify(response_object));
     
 }).listen(8070);
-console.log('Twt application is running on port 8070.');
+console.log('Hotel Booking application is running on port 8070.');
 

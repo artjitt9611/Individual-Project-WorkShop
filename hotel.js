@@ -7,6 +7,7 @@ const { Data_Booking,Booking } = require("./Booking");
 const reg_text = /^[a-zA-Z]{1,99}$/;
 const reg_tel = /^[0][689]\d{8}$/;
 const reg_number = /^\d[0-9]{1,4}$/;
+const reg_id = /^\d{1}$/
 const reg_price = /^\d{1,5}$/;
 const reg_room = /^[0-9][0-9][0-9]$/;
 const reg_day = /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/;
@@ -128,6 +129,25 @@ GetBooking = () => {
   return Data_Booking;
 };
 
+DeleteBooking = (idtofind) => {
+  if(reg_id.test(idtofind)){
+    let NewId = parseInt(idtofind)
+    const Remove = Data_Booking.find(({ id }) => id === NewId);
+    if(Remove === undefined){
+      throw 'This information already exists.'
+    }else{
+      console.log(Remove);
+      Data_Booking.splice(Remove,1);
+      return Remove
+    }
+  
+  }else{
+     throw 'input incorrect you input id'
+  }
+  
+};
+
+
 module.exports = {
   AddCustomer: AddCustomer,
   GetCustomer: GetCustomer,
@@ -135,4 +155,5 @@ module.exports = {
   GetRoom: GetRoom,
   AddBooking: AddBooking,
   GetBooking: GetBooking,
+  DeleteBooking:DeleteBooking
 };
