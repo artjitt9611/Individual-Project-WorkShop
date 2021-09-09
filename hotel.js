@@ -1,6 +1,8 @@
-const { Data_Customer, Customer } = require("./Customer");
-const { Data_Room, Room } = require("./Room");
-const { Data_Booking, Booking } = require("./Booking");
+
+
+const { Data_Customer,Customer } = require("./Customer");
+const { Data_Room,Room } = require("./Room");
+const { Data_Booking,Booking } = require("./Booking");
 
 const reg_text = /^[a-zA-Z]{1,99}$/;
 const reg_tel = /^[0][689]\d{8}$/;
@@ -8,6 +10,7 @@ const reg_number = /^\d[0-9]{1,4}$/;
 const reg_price = /^\d{1,5}$/;
 const reg_room = /^[0-9][0-9][0-9]$/;
 const reg_day = /^\d{2}-\d{2}-\d{4} \d{2}:\d{2}$/;
+
 
 AddCustomer = (first_name, last_name, phone) => {
   let fname = first_name;

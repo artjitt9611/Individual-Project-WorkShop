@@ -1,4 +1,5 @@
 
+
 const Room = function (number, type, price, status='Vacant', Active = 1) {
     this.Room_number = number;
     this.Type = type;
